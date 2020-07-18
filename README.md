@@ -6,5 +6,5 @@ Launch Scraper is a web scraper, built on Python, designed to gather data on Uni
 **Developers**
 Launch Scraper is developed solely by Neil Ipsen.
 
-*Contact*
+*Contact:*
 Neil can be reached via [email](ipsen.neil@gmail.com), and his profile and other projects can be viewed on [GitHub](https://www.github.com/Neil-Ipsen/).
