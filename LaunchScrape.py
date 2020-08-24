@@ -32,9 +32,4 @@ def siteParse():
         mission = missionHead.find('span', class_='mission')
         window = data[x]
         description = body[x]
-        return(date.text + "\n" + mission.text + "\n" + window.text + "\n" + description.text + "\n")
-        #print('1. ' + date.text)
-        #print('2. ' + mission.text)
-        #print('3. ' + window.text)
-        #print('4. ' + description.text)
-        #print()
+        return(date.text + "\n" + mission.text + "\n" + window.text + "\n" + description.text)
