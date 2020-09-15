@@ -33,3 +33,13 @@ def siteParse():
         window = data[x]
         description = body[x]
         return(date.text + "\n" + mission.text + "\n" + window.text + "\n" + description.text)
+
+split = siteParse.split("\n")
+
+split[0] = missionDate
+split[1] = missionTitle
+split[2] = missionWindow
+split[3] = missionDescription
+
+print(missionDate)
+
