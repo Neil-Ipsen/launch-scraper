@@ -24,6 +24,8 @@ def siteParse():
     for i in missionBody:
         body.append(i)
 
+    split = []
+
     # Group and print mission details.
     x = -1
     for missionHead in missionHead:
@@ -32,14 +34,12 @@ def siteParse():
         mission = missionHead.find('span', class_='mission')
         window = data[x]
         description = body[x]
-        return(date.text + "\n" + mission.text + "\n" + window.text + "\n" + description.text)
+        split.append = date.text + "\n" + mission.text + "\n" + window.text + "\n" + description.text
 
-split = siteParse.split("\n")
+    missionDate = split[0]
+    missionTitle = split[1]
+    missionWindow = split[2]
+    missionDescription = split[3]
 
-split[0] = missionDate
-split[1] = missionTitle
-split[2] = missionWindow
-split[3] = missionDescription
-
-print(missionDate)
+    return(split)
 
