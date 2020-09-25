@@ -1,5 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
+from apiclient.discovery import build
+from httplib2 import Http 
+from oauth2client import file, client, tools
 
 def siteParse():
     # Fetch source URL
@@ -34,7 +37,7 @@ def siteParse():
         mission = missionHead.find('span', class_='mission')
         window = data[x]
         description = body[x]
-        splitAdd = date.text + "\n" + mission.text + "\n" + window.text + "\n" + description.text
+        splitAdd = date.text + "\n" + mission.text + "\n" + window.text + "\n" + description.text + "\n"
         split.append(splitAdd)
 
     missionDate = split[0]
