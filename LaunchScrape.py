@@ -69,11 +69,11 @@ def siteParse():
 
     for i in split:
         EVENT = {
-            'summary': split[1],
+            'summary':     split[1],
             'description': split[3],
-            'start':   {'dateTime': split[0], 'timeZone': 'America/New_York'},
-            'end':     {'dateTime': split[0], 'timeZone': 'America/New_York'},
-            'reminders':{'useDefault': False, 'overrides': [{'method': 'popup', 'minutes': 48*60}, {'method': 'popup', 'minutes': 3*60},],},
+            'start':       {'dateTime': split[0], 'timeZone': 'America/New_York'},
+            'end':         {'dateTime': split[0], 'timeZone': 'America/New_York'},
+            'reminders':   {'useDefault': False, 'overrides': [{'method': 'popup', 'minutes': 48*60}, {'method': 'popup', 'minutes': 3*60},],},
         }
     
         e = CAL.events().insert(calendarId='primary', sendNotifications=True, body=EVENT).execute()
