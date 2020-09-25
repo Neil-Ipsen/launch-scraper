@@ -67,16 +67,13 @@ def siteParse():
     missionWindow = split[2]
     missionDescription = split[3]
 
-    if is_dst("America/New_York"):
-        GMT_OFF = '-04:00'
-    else:
-        GMT_OFF = '-05:00'
-    
     for i in split:
         EVENT = {
-            'summary': split[3],
-            'start':   {'dateTime': split[0] % GMT_OFF},
-            'end':     {'dateTime': split[0] % GMT_OFF}
+            'summary': split[1],
+            'description': split[3],
+            'start':   {'dateTime': split[0], 'timeZone': 'America/New_York'},
+            'end':     {'dateTime': split[0], 'timeZone': 'America/New_York'},
+            'reminders':{'useDefault': False, 'overrides': [{'method': 'popup', 'minutes': 48*60}, {'method': 'popup', 'minutes': 3*60},],},
         }
     
         e = CAL.events().insert(calendarId='primary', sendNotifications=True, body=EVENT).execute()
