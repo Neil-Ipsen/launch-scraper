@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 from httplib2 import Http 
-from oauth2client import file, client, tools
+from google.auth._oauth2client import file, client, tools
 import pytz
 from datetime import datetime, timedelta
 
