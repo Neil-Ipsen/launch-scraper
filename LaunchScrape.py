@@ -1,30 +1,28 @@
-import requests
+from __future__ import print_function
 from bs4 import BeautifulSoup
+import requests
+import datetime
+import pickle
+import os.path
 from googleapiclient.discovery import build
-from httplib2 import Http 
-from google.auth._oauth2client import file, client, tools
-import pytz
-from datetime import datetime, timedelta
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
+SCOPES = ['https://www.googleapis.com/auth/calendar']
+creds = None
+if os.path.exists('token.pickle'):
+    with open('token.pickle', 'rb') as token:
+        creds = pickle.load(token)
+if not creds or not creds.valid:
+    if creds and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+    else:
+        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+        creds = flow.run_local_server(port=0)
+    with open('token.pickle', 'wb') as token:
+        pickle.dump(creds, token)
 
-SCOPES = 'https://www.googleapis.com/auth/calendar'
-store = file.Storage('storage.json')
-creds = store.get()
-if not creds or creds.invalid:
-    flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
-    creds = tools.run_flow(flow, store, flags) \
-        if flags else tools.run(flow, store)
-CAL = build('calendar', 'v3', http=creds.authorize(Http()))
-
-def is_dst(zonename):
-    tz = pytz.timezone(zonename)
-    now = pytz.utc.localize(datetime.utc_now())
-    return now.astimezone(tz).dst() != timedelta(0)
+service = build('calendar', 'v3', credentials=creds)
 
 def siteParse():
     # Fetch source URL
@@ -68,15 +66,31 @@ def siteParse():
     missionDescription = split[3]
 
     for i in split:
-        EVENT = {
+        event = {
             'summary':     split[1],
             'description': split[3],
-            'start':       {'dateTime': split[0], 'timeZone': 'America/New_York'},
-            'end':         {'dateTime': split[0], 'timeZone': 'America/New_York'},
-            'reminders':   {'useDefault': False, 'overrides': [{'method': 'popup', 'minutes': 48*60}, {'method': 'popup', 'minutes': 3*60},],},
+            'start':       {
+                'dateTime': split[0], 
+                'timeZone': 'America/New_York'
+            },
+            'end':         {
+                'dateTime': split[0], 
+                'timeZone': 'America/New_York'
+            },
+            'reminders':   {
+                'useDefault': False, 
+                'overrides': [{
+                    'method': 'popup', 
+                    'minutes': 48*60
+                }, 
+                {
+                'method': 'popup', 
+                'minutes': 3*60
+                },],
+            },
         }
     
-        e = CAL.events().insert(calendarId='primary', sendNotifications=True, body=EVENT).execute()
+        event = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
     
     return
 
