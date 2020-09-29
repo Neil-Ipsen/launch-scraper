@@ -8,21 +8,22 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-SCOPES = ['https://www.googleapis.com/auth/calendar']
-creds = None
-if os.path.exists('token.pickle'):
-    with open('token.pickle', 'rb') as token:
-        creds = pickle.load(token)
-if not creds or not creds.valid:
-    if creds and creds.expired and creds.refresh_token:
-        creds.refresh(Request())
-    else:
-        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-        creds = flow.run_local_server(port=0)
-    with open('token.pickle', 'wb') as token:
-        pickle.dump(creds, token)
+#SCOPES = ['https://www.googleapis.com/auth/calendar']
+#creds = None
+# if os.path.exists('token.pickle'):
+#    with open('token.pickle', 'rb') as token:
+#        creds = pickle.load(token)
+# if not creds or not creds.valid:
+#    if creds and creds.expired and creds.refresh_token:
+#        creds.refresh(Request())
+#    else:
+#        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+#        creds = flow.run_local_server(port=0)
+#    with open('token.pickle', 'wb') as token:
+#        pickle.dump(creds, token)
+#
+#service = build('calendar', 'v3', credentials=creds)
 
-service = build('calendar', 'v3', credentials=creds)
 
 def siteParse():
     # Fetch source URL
@@ -57,41 +58,47 @@ def siteParse():
         mission = missionHead.find('span', class_='mission')
         window = data[x]
         description = body[x]
-        splitAdd = date.text + "\n" + mission.text + "\n" + window.text + "\n" + description.text + "\n"
-        split.append(splitAdd)
+
+        split.append(date.text)
+        split.append(mission.text)
+        split.append(window.text)
+        split.append(description.text)
 
     missionDate = split[0]
     missionTitle = split[1]
     missionWindow = split[2]
     missionDescription = split[3]
 
-    for i in split:
-        event = {
-            'summary':     split[1],
-            'description': split[3],
-            'start':       {
-                'dateTime': split[0], 
-                'timeZone': 'America/New_York'
-            },
-            'end':         {
-                'dateTime': split[0], 
-                'timeZone': 'America/New_York'
-            },
-            'reminders':   {
-                'useDefault': False, 
-                'overrides': [{
-                    'method': 'popup', 
-                    'minutes': 48*60
-                }, 
-                {
-                'method': 'popup', 
-                'minutes': 3*60
-                },],
-            },
-        }
-    
-        event = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
-    
+    # for i in split:
+    #   event = {
+    #        'summary':     split[1],
+    #        'description': split[3],
+    #        'start':       {
+    #            'dateTime': split[0],
+    #            'timeZone': 'America/New_York'
+    #        },
+    #        'end':         {
+    #            'dateTime': split[0],
+    #            'timeZone': 'America/New_York'
+    #        },
+    #        'reminders':   {
+    #            'useDefault': False,
+    #            'overrides': [{
+    #                'method': 'popup',
+    #                'minutes': 48*60
+    #            },
+    #            {
+    #            'method': 'popup',
+    #            'minutes': 3*60
+    #            },],
+    #        },
+    #    }
+    #
+    #    event = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
+    #
+    print(split[3])
+
     return
+
 
 siteParse()
