@@ -55,11 +55,12 @@ def siteParse():
     for missionHead in missionHead:
         x = x + 1
         date = missionHead.find('span', class_='launchdate')
+        date.split('/')
         mission = missionHead.find('span', class_='mission')
         window = data[x]
         description = body[x]
 
-        split.append(date.text)
+        split.append(date[0].text)
         split.append(mission.text)
         split.append(window.text)
         split.append(description.text)
@@ -96,7 +97,7 @@ def siteParse():
     #
     #    event = service.events().insert(calendarId='primary', sendNotifications=True, body=event).execute()
     #
-    print(split[3])
+    print(split[0])
 
     return
 
